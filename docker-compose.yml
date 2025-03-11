@@ -1,17 +1,27 @@
+name: jobs
 services:
-  mysql:
-    image: mysql:latest
-    container_name: mysql-container
-    restart: always
+  app:
+    build:
+      context: .
+    depends_on:
+      - db
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "9005:9005"
+    command: php -S 0.0.0.0:9005 -t public/
+
+  db:
+    image: mariadb:11
+    volumes:
+      - db:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: jobs
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: password
+      MARIADB_ROOT_PASSWORD: password
+      MARIADB_DATABASE: app
     ports:
       - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
 
 volumes:
-  mysql_data:
+  db:
+    driver: local

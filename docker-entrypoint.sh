@@ -13,6 +13,8 @@ if [ ! -f "./vendor/autoload.php" ]; then
     composer install
     printf "\e[35mRunning migrations...\e[0m\n"
     php artisan migrate --seed
+    printf "\e[35mGenerating key...\e[0m\n"
+    php artisan key:generate
 fi
 
 exec "$@"
